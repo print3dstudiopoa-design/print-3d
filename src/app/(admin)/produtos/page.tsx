@@ -6,12 +6,14 @@ import { TabelaProdutos } from "@/components/produtos/tabela-produtos";
 
 export const dynamic = "force-dynamic";
 
-const produtos = await prisma.produto.findMany();
+export default async function ProdutosPage() {
 
-console.log(
-  "PRODUTOS ENCONTRADOS:",
-  produtos.length
-);
+  const produtos = await prisma.produto.findMany();
+
+  console.log(
+    "PRODUTOS ENCONTRADOS:",
+    produtos.length
+  );
 
   const produtosFormatados = produtos.map(
   (produto) => ({
@@ -74,7 +76,6 @@ const produtosTela =
 
   return (
     <div>
-      <p>Total: {produtos.length}</p>
       <div className="mb-8 flex items-start justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.3em] text-stone-500">
