@@ -10,10 +10,7 @@ export default async function ProdutosPage() {
 
   const produtos = await prisma.produto.findMany();
 
-  console.log(
-    "PRODUTOS ENCONTRADOS:",
-    produtos.length
-  );
+  console.log(produtos);
 
   const produtosFormatados = produtos.map(
   (produto) => ({
