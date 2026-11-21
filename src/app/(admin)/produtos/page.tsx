@@ -8,6 +8,7 @@ export const dynamic = "force-dynamic";
 
 export default async function ProdutosPage() {
   const produtos = await prisma.produto.findMany({
+
     where: {
       ativo: true,
     },
@@ -16,7 +17,11 @@ export default async function ProdutosPage() {
     },
   });
 
-  <h2>Total de produtos: {produtos.length}</h2>
+    console.log(
+      "TOTAL PRODUTOS:",
+      produtos.length
+    );
+
 
   const produtosFormatados = produtos.map(
   (produto) => ({
