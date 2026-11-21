@@ -7,10 +7,14 @@ import { TabelaProdutos } from "@/components/produtos/tabela-produtos";
 export const dynamic = "force-dynamic";
 
 export default async function ProdutosPage() {
-
-  const produtos = await prisma.produto.findMany();
-
-  console.log(produtos);
+  const produtos = await prisma.produto.findMany({
+    where: {
+      ativo: true,
+    },
+    orderBy: {
+      codigo: "asc",
+    },
+  });
 
   const produtosFormatados = produtos.map(
   (produto) => ({
@@ -65,10 +69,6 @@ const produtosTela =
     })
   );
 
-     console.log(
-      "TOTAL PRODUTOS:",
-      produtos.length
-    );
 
 
   return (
@@ -82,8 +82,6 @@ const produtosTela =
           <h1 className="mt-2 text-5xl font-bold">
             Produtos
           </h1>
-
-          <p>Total de produtos: {produtos.length}</p>
 
           <p className="mt-3 text-stone-500">
             Seus modelos prontos para escolha,
