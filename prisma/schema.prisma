@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Produto {
+  id String @id @default(cuid())
+
+  codigo Int @unique @default(autoincrement())
+
+  nome String
+
+  tempoEstimadoMinutos Int
+
+  filamentoGramas Decimal @db.Decimal(10,2)
+
+  corPadrao String?
+
+  observacao String?
+
+  valorPadrao Decimal @db.Decimal(10,2)
+
+  ativo Boolean @default(true)
+
+  categoria String?
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+}
+
+model Pessoa {
+  id String @id @default(cuid())
+
+  nome String
+
+  dataNascimento DateTime?
+
+  telefone String?
+
+  email String?
+
+  instagram String?
+
+  facebook String?
+
+  cidade String?
+
+  bairro String?
+
+  cpf String?
+
+  observacao String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Configuracao {
+  id String @id @default(cuid())
+
+  percentualPerda Decimal @db.Decimal(5,2)
+
+  valorKwh Decimal @db.Decimal(10,4)
+
+  valorFilamentoKg Decimal @db.Decimal(10,2)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Cor {
+  id String @id @default(cuid())
+
+  nome String
+
+  hexadecimal String?
+
+  ativo Boolean @default(true)
+
+  createdAt DateTime @default(now())
+}
