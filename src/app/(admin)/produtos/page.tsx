@@ -16,6 +16,8 @@ export default async function ProdutosPage() {
     },
   });
 
+  <h2>Total de produtos: {produtos.length}</h2>
+
   const produtosFormatados = produtos.map(
   (produto) => ({
     ...produto,
