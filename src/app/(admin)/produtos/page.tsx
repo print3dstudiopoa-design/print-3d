@@ -4,6 +4,8 @@ import { ExcluirProduto } from "@/components/produtos/excluir-produto";
 import { EditarProduto } from "@/components/produtos/editar-produto";
 import { TabelaProdutos } from "@/components/produtos/tabela-produtos";
 
+export const dynamic = "force-dynamic";
+
 export default async function ProdutosPage() {
   const produtos = await prisma.produto.findMany({
     where: {
