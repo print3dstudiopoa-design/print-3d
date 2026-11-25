@@ -11,6 +11,7 @@ interface ProdutoTabela {
   tempoEstimadoMinutos: number;
   filamentoGramas: number;
   valorPadrao: number;
+  valorCusto: number;
 
   observacao: string | null;
   corPadrao: string | null;
@@ -50,18 +51,7 @@ export function TabelaProdutos({
         onChange={(e) =>
           setPesquisa(e.target.value)
         }
-        className="
-          mb-5
-          w-full
-          max-w-md
-          rounded-xl
-          border
-          border-stone-300
-          bg-white
-          px-4
-          py-3
-        "
-      />
+        className="mb-5 w-full max-w-md rounded-xl border border-stone-300 bg-white px-4 py-3"/>
 
       <div className="overflow-hidden rounded-3xl border bg-white">
         <table className="w-full">
@@ -75,23 +65,27 @@ export function TabelaProdutos({
                 Objeto
               </th>
 
-              <th className="px-5 py-4 text-left text-xs uppercase">
+              <th className="px-5 py-4 text-left text-xs uppercase text-center">
                 Tempo
               </th>
 
-              <th className="px-5 py-4 text-left text-xs uppercase">
+              <th className="px-5 py-4 text-left text-xs uppercase text-center">
                 Filamento
               </th>
 
-              <th className="px-5 py-4 text-left text-xs uppercase">
+              <th className="px-5 py-4 text-left text-xs uppercase text-center">
                 Cor padrão
               </th>
 
-              <th className="px-5 py-4 text-right text-xs uppercase">
-                Valor
+              <th className="px-5 py-4 text-right text-xs uppercase text-center">
+                Valor Custo
               </th>
 
-              <th className="px-5 py-4 text-center text-xs uppercase">
+              <th className="px-5 py-4 text-right text-xs uppercase text-center">
+                Valor Venda
+              </th>
+
+              <th className="px-5 py-4 text-center text-xs uppercase text-center">
                 Ações
               </th>
             </tr>
@@ -114,19 +108,23 @@ export function TabelaProdutos({
                     {produto.nome}
                   </td>
 
-                  <td className="px-5 py-4">
+                  <td className="px-5 py-4 text-center">
                     {produto.tempo}
                   </td>
 
-                  <td className="px-5 py-4">
+                  <td className="px-5 py-4 text-center">
                     {produto.filamento}
                   </td>
 
-                  <td className="px-5 py-4">
+                  <td className="px-5 py-4 text-center">
                     {produto.corPadrao}
                   </td>
 
-                  <td className="px-5 py-4 text-right">
+                  <td className="px-5 py-4 text-center">
+                    {produto.valorCusto}
+                  </td>
+                  
+                  <td className="px-5 py-4 text-center">
                     {produto.valor}
                   </td>
 

@@ -16,15 +16,19 @@ model Produto {
 
   tempoEstimadoMinutos Int
 
-  filamentoGramas Decimal @db.Decimal(10,2)
+  filamentoGramas Decimal @db.Decimal(10, 2)
 
   corPadrao String?
 
   observacao String?
 
-  valorPadrao Decimal @db.Decimal(10,2)
+  valorPadrao Decimal @db.Decimal(10, 2)
+
+  valorCusto Decimal @default(0) @db.Decimal(10, 2)
 
   ativo Boolean @default(true)
+
+  itens EncomendaItem[]
 
   categoria String?
 
@@ -63,11 +67,11 @@ model Pessoa {
 model Configuracao {
   id String @id @default(cuid())
 
-  percentualPerda Decimal @db.Decimal(5,2)
+  percentualPerda Decimal @db.Decimal(5, 2)
 
-  valorKwh Decimal @db.Decimal(10,4)
+  valorKwh Decimal @db.Decimal(10, 4)
 
-  valorFilamentoKg Decimal @db.Decimal(10,2)
+  valorFilamentoKg Decimal @db.Decimal(10, 2)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -83,4 +87,67 @@ model Cor {
   ativo Boolean @default(true)
 
   createdAt DateTime @default(now())
+}
+
+model Encomenda {
+  id String @id @default(cuid())
+
+  codigo Int @unique @default(autoincrement())
+
+  nomeCliente String
+
+  telefoneCliente String?
+
+  status StatusEncomenda @default(EM_FILA)
+
+  dataEntrega DateTime?
+
+  dataProducao DateTime?
+
+  dataFinalizacao DateTime?
+
+  dataEntregaReal DateTime?
+
+  valorTotal Decimal @default(0) @db.Decimal(10, 2)
+
+  observacao String?
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  itens EncomendaItem[]
+}
+
+model EncomendaItem {
+  id String @id @default(cuid())
+
+  encomendaId String
+
+  encomenda Encomenda @relation(fields: [encomendaId], references: [id])
+
+  produtoId String
+
+  produto Produto @relation(fields: [produtoId], references: [id])
+
+  quantidade Int @default(1)
+
+  valorUnitario Decimal @db.Decimal(10, 2)
+
+  valorTotal Decimal @db.Decimal(10, 2)
+
+  cor1 String?
+
+  cor2 String?
+
+  cor3 String?
+
+  observacao String?
+}
+
+enum StatusEncomenda {
+  EM_FILA
+  EM_PRODUCAO
+  FINALIZADA
+  CANCELADA
 }

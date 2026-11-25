@@ -33,7 +33,7 @@ export default async function PessoasPage() {
 );
 
   return (
-    <div className="max-w-7xl">
+    <div className="mx-auto w-full px-8">
       <div className="mb-8 flex items-start justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.3em] text-stone-500">

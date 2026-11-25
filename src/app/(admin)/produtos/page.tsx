@@ -24,6 +24,10 @@ export default async function ProdutosPage() {
       produto.valorPadrao
     ),
 
+    valorCusto: Number(
+      produto.valorCusto
+    ),
+
     filamentoGramas: Number(
       produto.filamentoGramas
     ),
@@ -55,6 +59,16 @@ const produtosTela =
         minimumFractionDigits: 2,
       })}`,
 
+      custo:
+        `R$ ${Number(
+          produto.valorCusto
+        ).toLocaleString(
+          "pt-BR",
+          {
+            minimumFractionDigits: 2,
+          }
+        )}`,
+
       editar: (
         <EditarProduto
           produto={produto}
@@ -72,7 +86,7 @@ const produtosTela =
 
 
   return (
-    <div>
+    <div className="mx-auto w-full px-8">
       <div className="mb-8 flex items-start justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.3em] text-stone-500">

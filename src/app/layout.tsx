@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "sonner";
 
-
 export const metadata: Metadata = {
   title: "Print 3D",
   description: "Sistema de gestão para impressão 3D",

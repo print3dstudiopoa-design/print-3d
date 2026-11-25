@@ -12,6 +12,7 @@ interface Props {
     filamentoGramas: number;
     corPadrao: string | null;
     valorPadrao: number;
+    valorCusto: number;
     observacao: string | null;
   };
 }

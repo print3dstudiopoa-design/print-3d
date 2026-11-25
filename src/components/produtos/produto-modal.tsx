@@ -1,12 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -18,6 +13,7 @@ interface Produto {
   filamentoGramas: number;
   corPadrao: string | null;
   valorPadrao: number;
+  valorCusto: number;
   observacao: string | null;
 }
 
@@ -42,6 +38,7 @@ export function ProdutoModal({
     const [filamentoGramas, setFilamentoGramas] = useState(produto?.filamentoGramas?.toString() ?? "");
     const [observacao, setObservacao] = useState(produto?.observacao ?? "");
     const [salvando, setSalvando] = useState(false);
+    const [valorCusto, setValorCusto] = useState(produto?.valorCusto?.toString() ?? "" );
 
   useEffect(() => {
     if (produto) {
@@ -56,6 +53,9 @@ export function ProdutoModal({
       setValor(
         produto.valorPadrao?.toString() ?? ""
       );
+      setValorCusto(
+        String(produto.valorCusto)
+      );
       setObservacao(
         produto.observacao ?? ""
       );
@@ -65,6 +65,7 @@ export function ProdutoModal({
       setFilamentoGramas("");
       setCor("");
       setValor("");
+      setValorCusto("");
       setObservacao("");
     }
   }, [produto, open]);
@@ -150,6 +151,37 @@ export function ProdutoModal({
             </div>
           </div>
 
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
+              Valor de Custo
+            </label>
+
+            <input
+              type="number"
+              step="0.01"
+              value={valorCusto}
+              onChange={(e) =>
+                setValorCusto(e.target.value)
+              }
+              className="w-full rounded-xl border p-3"
+            />
+          </div>
+          <div>
+              <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
+                Valor Padrão (R$)
+              </label>
+
+              <input
+                value={valor}
+                onChange={(e) =>
+                    setValor(e.target.value)
+                }
+                className="w-full rounded-xl border p-3"
+                />
+          </div>
+        </div>
+
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
@@ -164,21 +196,7 @@ export function ProdutoModal({
                 className="w-full rounded-xl border p-3"
                 />
             </div>
-            <div>
-              <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
-                Valor Padrão (R$)
-              </label>
-
-              <input
-                value={valor}
-                onChange={(e) =>
-                    setValor(e.target.value)
-                }
-                className="w-full rounded-xl border p-3"
-                />
-            </div>
           </div>
-
           <div>
             <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
               Observação

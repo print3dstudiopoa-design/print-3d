@@ -21,6 +21,9 @@ export async function POST(
       valorPadrao:
         body.valorPadrao,
 
+      valorCusto:
+        Number(body.valorCusto),
+
       observacao:
         body.observacao,
 
