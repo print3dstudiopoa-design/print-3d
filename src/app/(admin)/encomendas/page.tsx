@@ -12,13 +12,6 @@ export default async function EncomendasPage() {
       },
     });
 
-  const ordemStatus = {
-    EM_FILA: 1,
-    EM_PRODUCAO: 2,
-    FINALIZADA: 3,
-    CANCELADA: 4,
-  };
-
   const produtos =
     await prisma.produto.findMany({
       where: {
