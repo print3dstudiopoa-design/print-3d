@@ -276,6 +276,8 @@ export function ProdutoModal({
       valorPadrao:
         Number(valor),
 
+      valorCusto, 
+
       observacao,
     }),
   });

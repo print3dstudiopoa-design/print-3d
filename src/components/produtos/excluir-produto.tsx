@@ -38,16 +38,14 @@ export function ExcluirProduto({
   return (
     <AlertDialog>
 
-      <AlertDialogTrigger>
+      <AlertDialogTrigger
+        className="
+          text-stone-500
+          hover:text-red-600
+        "
+      >
 
-        <button
-          className="
-            text-stone-500
-            hover:text-red-600
-          "
-        >
-          <Trash2 size={16} />
-        </button>
+        <Trash2 size={16} />
 
       </AlertDialogTrigger>
 

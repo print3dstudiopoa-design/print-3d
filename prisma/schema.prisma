@@ -34,7 +34,8 @@ model Produto {
 
   createdAt DateTime @default(now())
 
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime    @updatedAt
+  VendaItem VendaItem[]
 }
 
 model Pessoa {
@@ -150,4 +151,53 @@ enum StatusEncomenda {
   EM_PRODUCAO
   FINALIZADA
   CANCELADA
+}
+
+model Venda {
+  id String @id @default(cuid())
+
+  codigo Int @unique @default(autoincrement())
+
+  dataPedido DateTime
+
+  dataEntrega DateTime?
+
+  cliente String
+
+  formaPagamento FormaPagamento
+
+  observacao String?
+
+  valorTotal Decimal @db.Decimal(10, 2)
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  itens VendaItem[]
+}
+
+model VendaItem {
+  id String @id @default(cuid())
+
+  vendaId String
+
+  venda Venda @relation(fields: [vendaId], references: [id])
+
+  produtoId String
+
+  produto Produto @relation(fields: [produtoId], references: [id])
+
+  quantidade Int
+
+  valorUnitario Decimal @db.Decimal(10, 2)
+
+  valorTotal Decimal @db.Decimal(10, 2)
+}
+
+enum FormaPagamento {
+  PIX
+  DINHEIRO
+  CARTAO_DEBITO
+  CARTAO_CREDITO
 }
