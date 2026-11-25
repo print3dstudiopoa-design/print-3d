@@ -38,7 +38,7 @@ export function ExcluirPessoa({
   return (
     <AlertDialog>
 
-      <AlertDialogTrigger asChild>
+      <AlertDialogTrigger>
 
         <button
           className="

@@ -38,7 +38,7 @@ export function ExcluirProduto({
   return (
     <AlertDialog>
 
-      <AlertDialogTrigger asChild>
+      <AlertDialogTrigger>
 
         <button
           className="
