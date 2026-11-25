@@ -19,31 +19,6 @@ export default async function EncomendasPage() {
     CANCELADA: 4,
   };
 
-  const encomendasOrdenadas =
-    encomendas.sort((a, b) => {
-
-      const statusA =
-        ordemStatus[a.status];
-
-      const statusB =
-        ordemStatus[b.status];
-
-      if (statusA !== statusB) {
-        return statusA - statusB;
-      }
-
-      if (!a.dataEntrega)
-        return 1;
-
-      if (!b.dataEntrega)
-        return -1;
-
-      return (
-        a.dataEntrega.getTime() -
-        b.dataEntrega.getTime()
-      );
-    });
-
   const produtos =
     await prisma.produto.findMany({
       where: {
