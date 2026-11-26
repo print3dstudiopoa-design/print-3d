@@ -79,18 +79,20 @@ export function ProdutoModal({
         }
       }}
     >
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="!w-[90vw] !max-w-[1000px]">
         <DialogHeader>
-          <DialogTitle>
+          <DialogTitle className="mb-2 block text-lx font-bold uppercase text-stone-500">
             {produto
                 ? "Editar Produto"
                 : "Novo Produto"}
           </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
+        <div className="space-y-2">
+          <div className="grid grid-cols-12 gap-4">
+
+            <div className="col-span-2">
+
               <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
                 Código
               </label>
@@ -98,30 +100,36 @@ export function ProdutoModal({
               <input
                 disabled
                 value={
-                        produto
-                            ? String(produto.codigo)
-                            : "Automático"
-                        }
-                className="w-full rounded-xl border p-3"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
-              Nome do Objeto
-            </label>
-
-            <input
-                value={nome}
-                onChange={(e) =>
-                    setNome(e.target.value.toUpperCase())
+                  produto
+                    ? String(produto.codigo)
+                    : "Automático"
                 }
                 className="w-full rounded-xl border p-3"
-                />
+              />
+
+            </div>
+
+            <div className="col-span-10">
+
+              <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
+                Nome do Objeto
+              </label>
+
+              <input
+                value={nome}
+                onChange={(e) =>
+                  setNome(
+                    e.target.value.toUpperCase()
+                  )
+                }
+                className="w-full rounded-xl border p-3"
+              />
+
+            </div>
+
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-5 gap-4">
             <div>
               <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
                 Tempo Estimado (min)
@@ -149,40 +157,37 @@ export function ProdutoModal({
                 className="w-full rounded-xl border p-3"
                 />
             </div>
-          </div>
+          
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
-              Valor de Custo
-            </label>
-
-            <input
-              type="number"
-              step="0.01"
-              value={valorCusto}
-              onChange={(e) =>
-                setValorCusto(e.target.value)
-              }
-              className="w-full rounded-xl border p-3"
-            />
-          </div>
-          <div>
+            <div>
               <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
-                Valor Padrão (R$)
+                Valor de Custo
               </label>
 
               <input
-                value={valor}
+                type="number"
+                step="0.01"
+                value={valorCusto}
                 onChange={(e) =>
-                    setValor(e.target.value)
+                  setValorCusto(e.target.value)
                 }
                 className="w-full rounded-xl border p-3"
-                />
-          </div>
-        </div>
+              />
+            </div>
+            <div>
+                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
+                  Valor Padrão (R$)
+                </label>
 
-          <div className="grid grid-cols-2 gap-4">
+                <input
+                  value={valor}
+                  onChange={(e) =>
+                      setValor(e.target.value)
+                  }
+                  className="w-full rounded-xl border p-3"
+                  />
+            </div>
+
             <div>
               <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
                 Cor Padrão
@@ -196,20 +201,23 @@ export function ProdutoModal({
                 className="w-full rounded-xl border p-3"
                 />
             </div>
-          </div>
-          <div>
-            <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
-              Observação
-            </label>
+          </div>       
 
-            <textarea
-                value={observacao}
-                onChange={(e) =>
-                    setObservacao(e.target.value)
-                }
-                rows={4}
-                className="w-full rounded-xl border p-3"
-                />
+          <div className="gap-4">
+            <div>
+              <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
+                Observação
+              </label>
+
+              <textarea
+                  value={observacao}
+                  onChange={(e) =>
+                      setObservacao(e.target.value)
+                  }
+                  rows={2}
+                  className="w-full rounded-xl border p-3"
+                  />
+            </div>
           </div>
 
           <div className="flex justify-end gap-3">

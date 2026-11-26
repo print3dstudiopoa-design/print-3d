@@ -61,6 +61,8 @@ model Pessoa {
 
   observacao String?
 
+  vendas Venda[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -158,9 +160,11 @@ model Venda {
 
   codigo Int @unique @default(autoincrement())
 
-  dataPedido DateTime
+  pessoaId String?
 
-  dataEntrega DateTime?
+  pessoa Pessoa? @relation(fields: [pessoaId],references: [id])
+
+  dataPedido DateTime
 
   cliente String
 

@@ -1,7 +1,5 @@
 "use client";
-
 import { useState } from "react";
-
 import { VendaModal } from "@/components/vendas/venda-modal";
 
 interface Produto {
@@ -12,10 +10,16 @@ interface Produto {
 
 interface Props {
   produtos: Produto[];
+
+  pessoas: {
+    id: string;
+    nome: string;
+  }[];
 }
 
 export default function VendasClient({
   produtos,
+  pessoas,
 }: Props) {
 
   const [open, setOpen] =
@@ -40,10 +44,9 @@ export default function VendasClient({
 
       <VendaModal
         open={open}
-        onClose={() =>
-          setOpen(false)
-        }
+        onClose={() => setOpen(false)}
         produtos={produtos}
+        pessoas={pessoas}
       />
     </>
   );

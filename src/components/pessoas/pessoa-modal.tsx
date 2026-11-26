@@ -106,19 +106,19 @@ export function PessoaModal({
         if (!value) onClose();
       }}
     >
-      <DialogContent className="max-w-3xl">
+      <DialogContent className="!w-[70vw] !max-w-[700px]">
         <DialogHeader>
-          <DialogTitle>
+          <DialogTitle className="mb-2 block text-lx font-bold uppercase text-stone-500">
             {pessoa
               ? "Editar Pessoa"
               : "Nova Pessoa"}
           </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-4">
-
+        <div className="space-y-1 ">
+          <div  className="grid grid-cols-2 gap-4">
           <div>
-            <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
+            <label className="mb-0 block text-xs font-semibold uppercase tracking-wider text-stone-500">
               Nome
             </label>
 
@@ -131,10 +131,25 @@ export function PessoaModal({
             />
           </div>
 
+          <div>
+              <label className="mb-0 block text-xs font-semibold uppercase tracking-wider text-stone-500">
+                CPF
+              </label>
+
+              <input
+                value={cpf}
+                onChange={(e) =>
+                  setCpf(e.target.value)
+                }
+                className="w-full rounded-xl border p-3"
+              />
+          </div>
+        </div>
+
           <div className="grid grid-cols-2 gap-4">
 
             <div>
-              <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
+              <label className="mb-0 block text-xs font-semibold uppercase tracking-wider text-stone-500">
                 Telefone
               </label>
 
@@ -148,34 +163,20 @@ export function PessoaModal({
             </div>
 
             <div>
-              <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
-                CPF
+              <label className="mb-0 block text-xs font-semibold uppercase tracking-wider text-stone-500">
+                E-mail
               </label>
 
               <input
-                value={cpf}
+                value={email}
                 onChange={(e) =>
-                  setCpf(e.target.value)
+                  setEmail(e.target.value)
                 }
                 className="w-full rounded-xl border p-3"
               />
             </div>
 
-          </div>
-
-          <div>
-            <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
-              E-mail
-            </label>
-
-            <input
-              value={email}
-              onChange={(e) =>
-                setEmail(e.target.value)
-              }
-              className="w-full rounded-xl border p-3"
-            />
-          </div>
+          </div>         
 
           <div className="grid grid-cols-2 gap-4">
 
@@ -215,7 +216,7 @@ export function PessoaModal({
             </label>
 
             <textarea
-              rows={4}
+              rows={2}
               value={observacao}
               onChange={(e) =>
                 setObservacao(e.target.value)

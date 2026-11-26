@@ -1,13 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import {Dialog, DialogContent, DialogHeader, DialogTitle,} from "@/components/ui/dialog";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 
 interface Props {
   open: boolean;
@@ -18,46 +14,53 @@ interface Props {
     nome: string;
     valor: number;
   }[];
+
+  pessoas: {
+    id: string;
+    nome: string;
+  }[];
+
+  venda?: {
+    id: string;
+    cliente: string;
+    formaPagamento: string;
+    observacao: string | null;
+  };
 }
 
 export function VendaModal({
   open,
   onClose,
   produtos,
+  pessoas,
+  venda,
 }: Props) {
 
-  const [cliente, setCliente] =
-    useState("");
+    const [pessoaId, setPessoaId] = useState("");
+    const [salvando, setSalvando] = useState(false);
+    const [formaPagamento, setFormaPagamento,] = useState("PIX");
+    const [produtoId, setProdutoId] = useState("");
+    const [quantidade, setQuantidade] = useState(1);
+    const [itens, setItens] = useState<ItemVenda[]>([]);
+    const [dataVenda, setDataVenda] = useState(new Date().toISOString().split("T")[0]);
+    const [observacao, setObservacao] = useState("");
+    const router = useRouter();
 
-  const [
-    formaPagamento,
-    setFormaPagamento,
-  ] = useState("PIX");
+    type ItemVenda = {
+        produtoId: string;
+        nome: string;
 
-  const [produtoId, setProdutoId] =
-    useState("");
+        quantidade: number;
 
-  const [quantidade, setQuantidade] =
-    useState(1);
+        valorUnitario: number;
+        valorTotal: number;
+        };  
 
-  const [itens, setItens] =
-    useState<ItemVenda[]>([]);
-
-  type ItemVenda = {
-    produtoId: string;
-    nome: string;
-
-    quantidade: number;
-
-    valorUnitario: number;
-    valorTotal: number;
-    };  
-
-  const produtoSelecionado =
-    produtos.find(
-      (produto) =>
-        produto.id === produtoId
-    );
+    const produtoSelecionado =
+        produtos.find(
+        (produto) =>
+            produto.id === produtoId
+        );
 
   const valorUnitario =
     produtoSelecionado?.valor ?? 0;
@@ -99,6 +102,88 @@ export function VendaModal({
     setQuantidade(1);
   }
 
+  async function salvarVenda() {
+    setSalvando(true);
+
+    if (!pessoaId) {
+        alert("Informe o cliente.");
+        return;
+    }
+
+    if (!dataVenda) {
+        alert("Informe a data da venda.");
+        return;
+    }
+
+    if (itens.length === 0) {
+        alert("Adicione pelo menos um item.");
+        return;
+    }
+
+    const pessoaSelecionada =
+        pessoas.find(
+        (pessoa) =>
+            pessoa.id === pessoaId
+        );
+
+
+    const url = venda
+        ? `/api/vendas/${venda.id}`
+        : "/api/vendas";
+
+        const method = venda
+        ? "PUT"
+        : "POST";
+
+        const response = await fetch(
+        url,
+        {
+            method,
+
+        headers: {
+            "Content-Type":
+            "application/json",
+        },
+
+        body: JSON.stringify({
+            dataVenda,
+            cliente: pessoaSelecionada?.nome,
+            formaPagamento,
+            observacao,
+
+            valorTotal:
+            totalPedido,
+
+            itens,
+        }),
+        }
+    );
+
+    if (response.ok) {
+        setDataVenda(
+            new Date()
+                .toISOString()
+                .split("T")[0]
+            );
+        setFormaPagamento("PIX");
+        setProdutoId("");
+        setQuantidade(1);
+        setItens([]);
+        setObservacao("");
+        setSalvando(false);
+        onClose();
+
+        router.refresh();
+        }
+        else {
+            alert(
+                "Erro ao salvar a venda."
+            );
+            setSalvando(false);
+        }
+        setSalvando(false);
+    }
+
   return (
     <Dialog
       open={open}
@@ -108,81 +193,154 @@ export function VendaModal({
 
         <DialogHeader>
 
-          <DialogTitle>
-            Nova Venda
-          </DialogTitle>
+          <DialogTitle className="mb-0 block text-lx font-bold uppercase text-stone-500">
+            {venda
+                ? "Editar Venda"
+                : "Nova Venda"}
+            </DialogTitle>
 
         </DialogHeader>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-15 gap-2">
 
-            <div>
+            <div className="col-span-2">
                 <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
-                Data do Pedido
+                Data da Venda
                 </label>
 
                 <input
-                type="date"
-                className="w-full rounded-xl border p-3"
+                    type="date"
+                    value={dataVenda}
+                    onChange={(e) =>
+                        setDataVenda(e.target.value)
+                    }
+                    className="w-full rounded-xl border p-3"
                 />
             </div>
 
-            <div>
+            <div className="col-span-5">
                 <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
                 Cliente
                 </label>
 
-                <input
-                value={cliente}
-                onChange={(e) =>
-                    setCliente(e.target.value)
-                }
-                className="w-full rounded-xl border p-3"
-                placeholder="Nome do cliente"
-                />
+                <select
+                    value={pessoaId}
+                    onChange={(e) =>
+                        setPessoaId(e.target.value)
+                    }
+                    className="w-full rounded-xl border p-3"
+                    >
+
+                    <option value="">
+                        Selecione o cliente
+                    </option>
+
+                    {pessoas.map((pessoa) => (
+
+                        <option
+                        key={pessoa.id}
+                        value={pessoa.id}
+                        >
+                        {pessoa.nome}
+                        </option>
+
+                    ))}
+
+                    </select>
+            </div>
+
+            <div className="col-span-3">
+
+                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
+                    Forma de Pagamento
+                </label>
+
+                <select
+                    value={formaPagamento}
+                    onChange={(e) =>
+                        setFormaPagamento(
+                        e.target.value
+                        )
+                    }
+                    className="w-full rounded-xl border p-3"
+                    >
+                    <option value="PIX">
+                        PIX
+                    </option>
+
+                    <option value="DINHEIRO">
+                        Dinheiro
+                    </option>
+
+                    <option value="CARTAO_DEBITO">
+                        Cartão Débito
+                    </option>
+
+                    <option value="CARTAO_CREDITO">
+                        Cartão Crédito
+                    </option>
+                </select>
+            </div>
+
+            <div className="rounded-2xl justify-end bg-stone-100 px-4 py-2 text-right col-span-5">
+
+                <div className="text-xs uppercase tracking-wider text-stone-500">
+                Total do Pedido
+                </div>
+
+                <div className="mt-0 text-2xl font-bold">
+
+                R$ {totalPedido.toLocaleString(
+                    "pt-BR",
+                    {
+                    minimumFractionDigits: 2,
+                    }
+                )}
+
+                </div>
+
             </div>
 
         </div>
         
-        <div className="mt-6 rounded-xl border p-4">
+        <div className="mt-0 rounded-xl border p-2">
 
-            <h3 className="mb-4 font-semibold">
+            <h3 className="mb-1 font-semibold">
                 ITENS:
             </h3>
 
-            <div className="grid grid-cols-12 gap-3">
+            <div className="grid grid-cols-12 gap-4">
 
                 <div className="col-span-5">
 
-                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
-                    Produto
-                </label>
+                    <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
+                        Produto
+                    </label>
 
-                <select
-                    value={produtoId}
-                    onChange={(e) =>
-                    setProdutoId(e.target.value)
-                    }
-                    className="w-full rounded-xl border p-2"
-                >
-
-                    <option value="">
-                    Selecione
-                    </option>
-
-                    {produtos.map((produto) => (
-
-                    <option
-                        key={produto.id}
-                        value={produto.id}
+                    <select
+                        value={produtoId}
+                        onChange={(e) =>
+                        setProdutoId(e.target.value)
+                        }
+                        className="w-full rounded-xl border p-2"
                     >
-                        {produto.nome}
-                    </option>
 
-                    ))}
+                        <option value="">
+                        Selecione
+                        </option>
 
-                </select>
+                        {produtos.map((produto) => (
 
+                        <option
+                            key={produto.id}
+                            value={produto.id}
+                        >
+                            {produto.nome}
+                        </option>
+
+                        ))}
+
+                    </select>
                 </div>
 
                 <div className="col-span-1">
@@ -202,7 +360,6 @@ export function VendaModal({
                         }
                         className="w-full rounded-xl border p-2 text-center"
                     />
-
                 </div>
 
                 <div className="col-span-2">
@@ -243,18 +400,19 @@ export function VendaModal({
 
                 </div>
                 
-                <div className="col-span-2">
+                <div className="col-span-2 gap-4 flex justify-end w-full">
                     <button
                         type="button"
                         onClick={adicionarItem}
                         className="
-                        rounded-xl
-                        bg-orange-700
-                        px-3
-                        py-4
-                        mt-4
-                        text-white
-                        "
+                            rounded-xl
+                            bg-orange-700
+                            px-1
+                            py-1
+                            mt-6
+                            text-white
+                            w-full
+                            "
                     >
                         Adicionar
                     </button>
@@ -263,12 +421,12 @@ export function VendaModal({
         </div>
        
 
-        <div className="mt-6">
+        <div className="rounded-xl border p-2">
 
             <div className="mb-2 grid grid-cols-12 gap-2 border-b pb-2 text-xs font-semibold uppercase tracking-wide text-stone-500">
 
                 <div className="col-span-5">
-                Produto
+                Produto(s) Selecionado(s)
                 </div>
 
                 <div className="col-span-2 text-center">
@@ -293,7 +451,7 @@ export function VendaModal({
 
                 {itens.length === 0 ? (
 
-                    <div className="py-6 text-center text-sm text-stone-500">
+                    <div className="py-0 text-center text-sm text-stone-500">
                     Nenhum produto adicionado.
                     </div>
 
@@ -309,7 +467,8 @@ export function VendaModal({
                         items-center
                         gap-2
                         border-b
-                        py-2
+                        py-1
+                        px-2
                         "
                     >
 
@@ -375,94 +534,23 @@ export function VendaModal({
 
         </div>
 
-        <div className="mt-6 grid grid-cols-2 gap-4">
-
-            <div>
-
-                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
-                    Forma de Pagamento
-                </label>
-
-                <select
-                    value={formaPagamento}
-                    onChange={(e) =>
-                        setFormaPagamento(
-                        e.target.value
-                        )
-                    }
-                    className="w-full rounded-xl border p-3"
-                    >
-                    <option value="PIX">
-                        PIX
-                    </option>
-
-                    <option value="DINHEIRO">
-                        Dinheiro
-                    </option>
-
-                    <option value="CARTAO_DEBITO">
-                        Cartão Débito
-                    </option>
-
-                    <option value="CARTAO_CREDITO">
-                        Cartão Crédito
-                    </option>
-                </select>
-
-            </div>
-
-            <div>
-
-                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
-                    Data de Entrega
-                </label>
-
-                <input
-                type="date"
-                className="w-full rounded-xl border p-3"
-                />
-
-            </div>
-
-        </div>
-
-        <div className="mt-4">
+        <div className="mt-0">
 
             <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
                 Observação
             </label>
 
             <textarea
-                rows={2}
+                rows={1}
+                value={observacao}
+                onChange={(e) =>
+                    setObservacao(e.target.value)
+                }
                 className="w-full rounded-xl border p-3"
             />
-
-            </div>
-
-        <div className="mt-6 flex justify-end">
-
-            <div className="rounded-2xl bg-stone-100 px-6 py-4 text-right">
-
-                <div className="text-xs uppercase tracking-wider text-stone-500">
-                Total do Pedido
-                </div>
-
-                <div className="mt-2 text-3xl font-bold">
-
-                R$ {totalPedido.toLocaleString(
-                    "pt-BR",
-                    {
-                    minimumFractionDigits: 2,
-                    }
-                )}
-
-                </div>
-
-            </div>
-
         </div>
 
-        <div className="mt-6 flex justify-end gap-4">
+        <div className="mt-0 flex justify-end gap-4">
 
             <button
                 onClick={onClose}
@@ -471,15 +559,19 @@ export function VendaModal({
             </button>
 
             <button
-                className="
+              onClick={salvarVenda}
+              disabled={salvando}
+              className="
                 rounded-xl
                 bg-orange-700
                 px-5
                 py-2
                 text-white
-                "
+              "
             >
-                Salvar
+              {salvando
+                ? "Salvando..."
+                : "Salvar"}
             </button>
 
             </div>

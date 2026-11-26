@@ -184,7 +184,7 @@ export function EncomendaModal({
         <div className="flex flex-col h-full">
 
         <div>
-            <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
+            <label className="mb-0 block text-xs font-semibold uppercase tracking-wider text-stone-500">
                 Nome do Cliente
             </label>
 
@@ -202,7 +202,7 @@ export function EncomendaModal({
         <div className="grid grid-cols-2 gap-4 mt-2">
 
             <div>
-                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
+                <label className="mb-0 block text-xs font-semibold uppercase tracking-wider text-stone-500">
                     Telefone
                 </label>
 
@@ -218,7 +218,7 @@ export function EncomendaModal({
             </div>
 
             <div>
-                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
+                <label className="mb-0 block text-xs font-semibold uppercase tracking-wider text-stone-500">
                 Situação
                 </label>
 
@@ -230,7 +230,7 @@ export function EncomendaModal({
             </div>
 
             <div>
-                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
+                <label className="mb-0 block text-xs font-semibold uppercase tracking-wider text-stone-500">
                 Data Cadastro
                 </label>
 
@@ -242,7 +242,7 @@ export function EncomendaModal({
             </div>
 
             <div>
-                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone-500">
+                <label className="mb-0 block text-xs font-semibold uppercase tracking-wider text-stone-500">
                 Data Entrega
                 </label>
 
@@ -258,7 +258,7 @@ export function EncomendaModal({
 
         </div>
 
-        <div className="rounded-xl border border-stone-200 p-4 mt-2">
+        <div className="rounded-xl border border-stone-200 p-2 mt-1">
 
             <div className="mb-1">
                 <h3 className="font-semibold">

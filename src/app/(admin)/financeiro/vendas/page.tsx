@@ -1,24 +1,15 @@
 import { prisma } from "@/lib/prisma";
 import VendasClient from "./vendas-client";
+import { ExcluirVenda } from "@/components/vendas/excluir-venda";
 
 export const dynamic = "force-dynamic";
 
 export default async function VendasPage() {
 
   const hoje = new Date();
-
-  const mesAtual =
-    hoje.getMonth();
-
-  const anoAtual =
-    hoje.getFullYear();
-
-  const inicioMes =
-    new Date(
-      anoAtual,
-      mesAtual,
-      1
-    );
+  const mesAtual = hoje.getMonth();
+  const anoAtual = hoje.getFullYear();
+  const inicioMes = new Date(anoAtual, mesAtual, 1);
 
   const fimMes =
     new Date(
@@ -60,8 +51,35 @@ export default async function VendasPage() {
       0
     );
 
-  const quantidadePedidos =
-    vendas.length;
+  function formatarPagamento(
+    pagamento: string
+  ) {
+    switch (pagamento) {
+      case "PIX":
+        return "PIX";
+
+      case "DINHEIRO":
+        return "Dinheiro";
+
+      case "CARTAO_DEBITO":
+        return "Cartão Débito";
+
+      case "CARTAO_CREDITO":
+        return "Cartão Crédito";
+
+      default:
+        return pagamento;
+    }
+  }
+
+  const pessoas =
+    await prisma.pessoa.findMany({
+      orderBy: {
+        nome: "asc",
+      },
+    });
+
+  const quantidadePedidos = vendas.length;
 
   const ticketMedio =
     quantidadePedidos > 0
@@ -78,6 +96,18 @@ export default async function VendasPage() {
         nome: "asc",
       },
     });
+
+  const totalItens =
+    vendas.reduce(
+      (total, venda) =>
+        total +
+        venda.itens.reduce(
+          (soma, item) =>
+            soma + item.quantidade,
+          0
+        ),
+      0
+    );
 
   return (
 
@@ -105,16 +135,24 @@ export default async function VendasPage() {
       </div>
 
       <VendasClient
-        produtos={produtos.map(
-          (produto) => ({
-            id: produto.id,
-            nome: produto.nome,
-            valor: Number(
-              produto.valorPadrao
-            ),
-          })
-        )}
-      />
+          produtos={produtos.map(
+            (produto) => ({
+              id: produto.id,
+              nome: produto.nome,
+              valor: Number(
+                produto.valorPadrao
+              ),
+            })
+          )}
+
+          pessoas={pessoas.map(
+            (pessoa) => ({
+              id: pessoa.id,
+              nome: pessoa.nome,
+            })
+          )}
+
+        />
 
     </div>
 
@@ -148,24 +186,7 @@ export default async function VendasPage() {
 
       </div>
 
-      <div className="grid grid-cols-3 gap-3">
-
-        <div className="rounded-2xl border p-4 text-center">
-
-          <div className="text-xs uppercase text-stone-500">
-            Total do Mês
-          </div>
-
-          <div className="text-2xl font-bold">
-            R$ {totalMes.toLocaleString(
-              "pt-BR",
-              {
-                minimumFractionDigits: 2,
-              }
-            )}
-          </div>
-
-        </div>
+      <div className="grid grid-cols-4 gap-3">
 
         <div className="rounded-2xl border p-4 text-center">
 
@@ -175,6 +196,18 @@ export default async function VendasPage() {
 
           <div className="text-2xl font-bold">
             {quantidadePedidos}
+          </div>
+
+        </div>
+
+        <div className="rounded-2xl border p-4 text-center">
+
+          <div className="text-xs uppercase text-stone-500">
+            Itens Vendidos
+          </div>
+
+          <div className="text-2xl font-bold">
+            {totalItens}
           </div>
 
         </div>
@@ -193,141 +226,41 @@ export default async function VendasPage() {
               }
             )}
           </div>
-
         </div>
 
+        <div className="rounded-2xl border p-4 text-center">
+
+          <div className="text-xs uppercase text-stone-500">
+            Total do Mês
+          </div>
+
+          <div className="text-2xl font-bold">
+            R$ {totalMes.toLocaleString(
+              "pt-BR",
+              {
+                minimumFractionDigits: 2,
+              }
+            )}
+          </div>
+        </div>
       </div>
-
     </div>
 
-    <div className="overflow-hidden rounded-3xl border bg-white">
+    <input
+        type="text"
+        placeholder="Pesquisar cliente..."
+        className="
+          mb-5
+          w-full
+          max-w-md
+          rounded-xl
+          border
+          px-4
+          py-3
+        "
+      />
 
-      <table className="w-full">
 
-        <thead>
-
-          <tr className="border-b bg-stone-50">
-
-            <th className="px-5 py-4 text-left text-xs uppercase">
-              Data
-            </th>
-
-            <th className="px-5 py-4 text-left text-xs uppercase">
-              Cliente
-            </th>
-
-            <th className="px-5 py-4 text-left text-xs uppercase">
-              Produtos
-            </th>
-
-            <th className="px-5 py-4 text-left text-xs uppercase">
-              Pagamento
-            </th>
-
-            <th className="px-5 py-4 text-right text-xs uppercase">
-              Total
-            </th>
-
-            <th className="px-5 py-4 text-center text-xs uppercase">
-              Ações
-            </th>
-
-          </tr>
-
-        </thead>
-
-        <tbody>
-
-          {vendas.length === 0 ? (
-
-            <tr>
-
-              <td
-                colSpan={6}
-                className="px-5 py-10 text-center text-stone-500"
-              >
-                Nenhuma venda encontrada.
-              </td>
-
-            </tr>
-
-          ) : (
-
-            vendas.map((venda) => (
-
-              <tr
-                key={venda.id}
-                className="border-b"
-              >
-
-                <td className="px-5 py-4">
-
-                  {venda.dataPedido.toLocaleDateString(
-                    "pt-BR"
-                  )}
-
-                </td>
-
-                <td className="px-5 py-4">
-
-                  {venda.cliente}
-
-                </td>
-
-                <td className="px-5 py-4">
-
-                  {venda.itens.map(
-                    (item) => (
-
-                      <div key={item.id}>
-                        {item.quantidade}x{" "}
-                        {item.produto.nome}
-                      </div>
-
-                    )
-                  )}
-
-                </td>
-
-                <td className="px-5 py-4">
-
-                  {venda.formaPagamento}
-
-                </td>
-
-                <td className="px-5 py-4 text-right">
-
-                  R${" "}
-
-                  {Number(
-                    venda.valorTotal
-                  ).toLocaleString(
-                    "pt-BR",
-                    {
-                      minimumFractionDigits:
-                        2,
-                    }
-                  )}
-
-                </td>
-
-                <td className="px-5 py-4 text-center">
-
-                  ✏️ 🗑
-
-                </td>
-
-              </tr>
-
-            ))
-
-          )}
-
-        </tbody>
-
-      </table>
-
-    </div>
 
 
   </div>
