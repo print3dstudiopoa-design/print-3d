@@ -1,16 +1,25 @@
 import { prisma } from "@/lib/prisma";
 import EncomendasClient from "./encomendas-client";
 import { TabelaEncomendas } from "@/components/encomendas/tabela-encomendas";
+import { VisualizarEncomenda } from "@/components/encomendas/visualizar-encomenda";
 
 export const dynamic = "force-dynamic";
 
 export default async function EncomendasPage() {
+  
   const encomendas =
-    await prisma.encomenda.findMany({
-      include: {
-        itens: true,
+  await prisma.encomenda.findMany({
+    include: {
+      itens: {
+        include: {
+          produto: true,
+        },
       },
-    });
+    },
+    orderBy: {
+      dataEntrega: "desc",
+    },
+  });
 
   const produtos =
     await prisma.produto.findMany({
@@ -27,27 +36,37 @@ export default async function EncomendasPage() {
       (encomenda) => ({
         id: encomenda.id,
 
-        codigo:
-          encomenda.codigo,
+        codigo: encomenda.codigo,
 
-        nomeCliente:
+        cliente:
           encomenda.nomeCliente,
 
         status:
           encomenda.status,
 
+        observacao:
+          encomenda.observacao,
+
         dataEntrega:
-          encomenda.dataEntrega
-            ? encomenda.dataEntrega.toISOString()
-            : null,
+          encomenda.dataEntrega,
 
-        valorTotal: Number(
-          encomenda.valorTotal
-        ),
+        valorTotal:
+          Number(encomenda.valorTotal),
 
-        quantidadeItens:
-          encomenda.itens?.length ??
-          0,
+        itens:
+          encomenda.itens.map(
+            (item) => ({
+              id: item.id,
+
+              quantidade:
+                item.quantidade,
+
+              produto: {
+                nome:
+                  item.produto.nome,
+              },
+            })
+          ),
       })
     );
 

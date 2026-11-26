@@ -182,83 +182,68 @@ export function EncomendaModal({
         </DialogHeader>
 
         <div className="flex flex-col h-full">
+            <div className="grid grid-cols-5 gap-4 mt-2">
+                <div className="col-span-2">
+                    <label className="mb-0 block text-xs font-semibold uppercase tracking-wider text-stone-500">
+                        Nome do Cliente
+                    </label>
 
-        <div>
-            <label className="mb-0 block text-xs font-semibold uppercase tracking-wider text-stone-500">
-                Nome do Cliente
-            </label>
+                    <input
+                        value={nomeCliente}
+                        onChange={(e) =>
+                        setNomeCliente(
+                            e.target.value.toUpperCase()
+                        )
+                        }
+                        className="w-full rounded-xl border p-2"
+                    />
+                </div>
 
-            <input
-                value={nomeCliente}
-                onChange={(e) =>
-                setNomeCliente(
-                    e.target.value.toUpperCase()
-                )
-                }
-                className="w-full rounded-xl border p-2"
-            />
-        </div>
+                <div>
+                    <label className="mb-0 block text-xs font-semibold uppercase tracking-wider text-stone-500">
+                        Telefone
+                    </label>
 
-        <div className="grid grid-cols-2 gap-4 mt-2">
+                    <input
+                        value={telefoneCliente}
+                        onChange={(e) =>
+                        setTelefoneCliente(
+                            e.target.value
+                        )
+                        }
+                        className="w-full rounded-xl border p-2"
+                    />
+                </div>
 
-            <div>
-                <label className="mb-0 block text-xs font-semibold uppercase tracking-wider text-stone-500">
-                    Telefone
-                </label>
+                <div>
+                    <label className="mb-0 block text-xs font-semibold uppercase tracking-wider text-stone-500">
+                    Situação
+                    </label>
 
-                <input
-                    value={telefoneCliente}
+                    <input
+                    disabled
+                    value="EM FILA"
+                    className="w-full rounded-xl border p-2 bg-stone-50"
+                    />
+                </div>
+
+                <div>
+                    <label className="mb-0 block text-xs font-semibold uppercase tracking-wider text-stone-500">
+                    Data Entrega
+                    </label>
+
+                    <input
+                    type="date"
+                    value={dataEntrega}
                     onChange={(e) =>
-                    setTelefoneCliente(
-                        e.target.value
-                    )
+                        setDataEntrega(e.target.value)
                     }
                     className="w-full rounded-xl border p-2"
-                />
-            </div>
+                    />
+                </div>
+            </div>            
 
-            <div>
-                <label className="mb-0 block text-xs font-semibold uppercase tracking-wider text-stone-500">
-                Situação
-                </label>
-
-                <input
-                disabled
-                value="EM FILA"
-                className="w-full rounded-xl border p-2 bg-stone-50"
-                />
-            </div>
-
-            <div>
-                <label className="mb-0 block text-xs font-semibold uppercase tracking-wider text-stone-500">
-                Data Cadastro
-                </label>
-
-                <input
-                value={dataCadastro}
-                disabled
-                className="w-full rounded-xl border p-2 bg-stone-50"
-                />
-            </div>
-
-            <div>
-                <label className="mb-0 block text-xs font-semibold uppercase tracking-wider text-stone-500">
-                Data Entrega
-                </label>
-
-                <input
-                type="date"
-                value={dataEntrega}
-                onChange={(e) =>
-                    setDataEntrega(e.target.value)
-                }
-                className="w-full rounded-xl border p-2"
-                />
-            </div>
-
-        </div>
-
-        <div className="rounded-xl border border-stone-200 p-2 mt-1">
+        <div className="rounded-xl border border-stone-200 p-2 mt-2">
 
             <div className="mb-1">
                 <h3 className="font-semibold">
@@ -551,7 +536,7 @@ export function EncomendaModal({
             </label>
 
             <textarea
-                rows={2}
+                rows={1}
                 value={observacao}
                 onChange={(e) =>
                 setObservacao(
@@ -564,23 +549,23 @@ export function EncomendaModal({
 
         <div>
 
-        <div className="flex justify-end">
+        <div className="flex justify-center">
 
             <div className="grid grid-cols-3 gap-4 mt-0">
 
-                <div className="rounded-2xl bg-stone-100 p-4 text-center">
+                <div className="rounded-2xl bg-stone-100 p-2 text-center">
 
                     <div className="text-xs uppercase tracking-wider text-stone-500">
                     Tempo Total
                     </div>
 
-                    <div className="mt-2 text-2xl font-bold">
+                    <div className="mt-1 text-2xl font-bold">
                     {horas}h {minutos}min
                     </div>
 
                 </div>
 
-                <div className="rounded-2xl bg-stone-100 p-4 text-center">
+                <div className="rounded-2xl bg-stone-100 p-2 text-center">
 
                     <div className="text-xs uppercase tracking-wider text-stone-500">
                     Filamento Total
@@ -592,7 +577,7 @@ export function EncomendaModal({
 
                 </div>
 
-                <div className="rounded-2xl bg-stone-100 p-4 text-center">
+                <div className="rounded-2xl bg-stone-100 p-2 text-center">
 
                     <div className="text-xs uppercase tracking-wider text-stone-500">
                     Valor Total
@@ -613,7 +598,7 @@ export function EncomendaModal({
 
         </div>
 
-        <div className="flex justify-end gap-4 mt-2">
+        <div className="flex justify-end gap-4 mt-0">
 
             <button
               onClick={onClose}

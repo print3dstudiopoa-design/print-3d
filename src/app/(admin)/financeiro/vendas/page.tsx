@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import VendasClient from "./vendas-client";
-import { ExcluirVenda } from "@/components/vendas/excluir-venda";
+import { TabelaVendas } from "@/components/vendas/tabela-vendas";
 
 export const dynamic = "force-dynamic";
 
@@ -51,27 +51,6 @@ export default async function VendasPage() {
       0
     );
 
-  function formatarPagamento(
-    pagamento: string
-  ) {
-    switch (pagamento) {
-      case "PIX":
-        return "PIX";
-
-      case "DINHEIRO":
-        return "Dinheiro";
-
-      case "CARTAO_DEBITO":
-        return "Cartão Débito";
-
-      case "CARTAO_CREDITO":
-        return "Cartão Crédito";
-
-      default:
-        return pagamento;
-    }
-  }
-
   const pessoas =
     await prisma.pessoa.findMany({
       orderBy: {
@@ -109,6 +88,33 @@ export default async function VendasPage() {
       0
     );
 
+  const vendasTabela =
+  vendas.map((venda) => ({
+    ...venda,
+
+    dataPedido:
+      venda.dataPedido.toISOString(),
+
+    valorTotal:
+      Number(venda.valorTotal),
+
+    itens: venda.itens.map(
+      (item) => ({
+        ...item,
+
+        valorUnitario:
+          Number(
+            item.valorUnitario
+          ),
+
+        valorTotal:
+          Number(
+            item.valorTotal
+          ),
+      })
+    ),
+  }));
+
   return (
 
   <div className="mx-auto w-full max-w-7xl">
@@ -126,11 +132,6 @@ export default async function VendasPage() {
         <h1 className="mt-2 text-5xl font-bold">
           Vendas
         </h1>
-
-        <p className="mt-3 text-stone-500">
-          Cada pedido do mês, com o que foi vendido,
-          por quanto e como foi pago.
-        </p>
 
       </div>
 
@@ -246,22 +247,9 @@ export default async function VendasPage() {
       </div>
     </div>
 
-    <input
-        type="text"
-        placeholder="Pesquisar cliente..."
-        className="
-          mb-5
-          w-full
-          max-w-md
-          rounded-xl
-          border
-          px-4
-          py-3
-        "
-      />
-
-
-
+    <TabelaVendas
+      vendas={vendasTabela}
+    />
 
   </div>
 

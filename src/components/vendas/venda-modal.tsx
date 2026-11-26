@@ -28,6 +28,8 @@ interface Props {
   };
 }
 
+
+
 export function VendaModal({
   open,
   onClose,
@@ -184,6 +186,22 @@ export function VendaModal({
         setSalvando(false);
     }
 
+    {/*
+    useEffect(() => {
+
+        if (!venda) return;
+
+        setFormaPagamento(
+            venda.formaPagamento
+        );
+
+        setObservacao(
+            venda.observacao ?? ""
+        );
+
+        }, [venda]);
+*/}
+
   return (
     <Dialog
       open={open}
@@ -193,7 +211,7 @@ export function VendaModal({
 
         <DialogHeader>
 
-          <DialogTitle className="mb-0 block text-lx font-bold uppercase text-stone-500">
+          <DialogTitle className="mb-2 block text-lx font-bold uppercase text-stone-500">
             {venda
                 ? "Editar Venda"
                 : "Nova Venda"}

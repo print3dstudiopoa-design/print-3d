@@ -2,15 +2,26 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { VisualizarEncomenda } from "./visualizar-encomenda";
+import { EncomendaItem } from "@prisma/client";
 
 interface EncomendaTabela {
   id: string;
   codigo: number;
-  nomeCliente: string;
+  cliente: string;
   status: string;
-  dataEntrega: string | null;
+  dataEntrega: Date | null;
+  observacao: string | null;
   valorTotal: number;
-  quantidadeItens: number;
+  itens: ItemEncomenda[];
+}
+
+interface ItemEncomenda {
+  id: string;
+  quantidade: number;
+  produto: {
+    nome: string;
+  };
 }
 
 interface Props {
@@ -28,7 +39,7 @@ export function TabelaEncomendas({
   const encomendasFiltradas =
     encomendas.filter(
       (encomenda) =>
-        encomenda.nomeCliente
+        encomenda.cliente
           .toLowerCase()
           .includes(
             pesquisa.toLowerCase()
@@ -118,7 +129,7 @@ export function TabelaEncomendas({
                 Cliente
               </th>
 
-              <th className="px-5 py-4 text-center text-xs uppercase">
+              <th className="px-5 py-4 text-left text-xs uppercase">
                 Itens
               </th>
 
@@ -132,6 +143,10 @@ export function TabelaEncomendas({
 
               <th className="px-5 py-4 text-right text-xs uppercase">
                 Valor
+              </th>
+
+              <th className="px-5 py-4 text-right text-xs uppercase">
+                Ações
               </th>
 
             </tr>
@@ -159,14 +174,22 @@ export function TabelaEncomendas({
 
                   <td className="px-5 py-4">
                     {
-                      encomenda.nomeCliente
+                      encomenda.cliente
                     }
                   </td>
 
-                  <td className="px-5 py-4 text-center">
-                    {
-                      encomenda.quantidadeItens
-                    }
+                  <td className="px-5 py-4">
+                      {encomenda.itens.length > 0 ? (
+                        <ul className="space-y-1">
+                          {encomenda.itens.map((item) => (
+                            <li key={item.id} className="text-sm">
+                              {item.quantidade}x {item.produto.nome}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        "-"
+                      )}
                   </td>
 
                   <td className="px-5 py-4">
@@ -235,6 +258,17 @@ export function TabelaEncomendas({
                           2,
                       }
                     )}
+
+                  </td>
+
+                  <td>
+                    <div className="flex justify-center gap-3">
+
+                      <VisualizarEncomenda
+                        encomenda={encomenda}
+                      />
+
+                    </div>
 
                   </td>
 
