@@ -29,7 +29,6 @@ export function EncomendaModal({
   const [observacao, setObservacao] = useState("");
   const [nomeCliente, setNomeCliente] =useState("");
   const [telefoneCliente,setTelefoneCliente,] = useState("");
-  const dataCadastro = new Date().toLocaleDateString("pt-BR");
   const [produtoId, setProdutoId] = useState("");
   const [quantidade, setQuantidade] = useState(1);
   const [cor1, setCor1] = useState("");

@@ -43,7 +43,21 @@ export function EditarProduto({
       <ProdutoModal
         open={open}
         onClose={() => setOpen(false)}
-        produto={produto}
+        produto={{
+          ...produto,
+
+          filamentoGramas: Number(
+            produto.filamentoGramas
+          ),
+
+          valorPadrao: Number(
+            produto.valorPadrao
+          ),
+
+          valorCusto: Number(
+            produto.valorCusto
+          ),
+        }}
       />
     </>
   );

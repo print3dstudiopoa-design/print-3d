@@ -7,6 +7,7 @@ import { TabelaPessoas } from "@/components/pessoas/tabela-pessoas";
 export const dynamic = "force-dynamic";
 
 export default async function PessoasPage() {
+  
   const pessoas =
     await prisma.pessoa.findMany({
       orderBy: {

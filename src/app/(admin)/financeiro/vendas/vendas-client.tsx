@@ -6,6 +6,7 @@ interface Produto {
   id: string;
   nome: string;
   valor: number;
+  valorCusto: number;
 }
 
 interface Props {

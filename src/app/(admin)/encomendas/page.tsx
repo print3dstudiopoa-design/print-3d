@@ -1,7 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import EncomendasClient from "./encomendas-client";
 import { TabelaEncomendas } from "@/components/encomendas/tabela-encomendas";
-import { VisualizarEncomenda } from "@/components/encomendas/visualizar-encomenda";
 
 export const dynamic = "force-dynamic";
 

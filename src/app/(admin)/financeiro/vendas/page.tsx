@@ -143,6 +143,12 @@ export default async function VendasPage() {
               valor: Number(
                 produto.valorPadrao
               ),
+              valorCusto: Number(
+                produto.valorCusto
+              ),
+              filamentoGramas: Number(
+                produto.filamentoGramas
+              )
             })
           )}
 

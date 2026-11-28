@@ -1,7 +1,5 @@
 import { prisma } from "@/lib/prisma";
 import ProdutosClient from "./produtos-client";
-import { ExcluirProduto } from "@/components/produtos/excluir-produto";
-import { EditarProduto } from "@/components/produtos/editar-produto";
 import { TabelaProdutos } from "@/components/produtos/tabela-produtos";
 
 export const dynamic = "force-dynamic";
@@ -68,22 +66,11 @@ const produtosTela =
             minimumFractionDigits: 2,
           }
         )}`,
-
-      editar: (
-        <EditarProduto
-          produto={produto}
-        />
-      ),
-
-      excluir: (
-        <ExcluirProduto
-          id={produto.id}
-        />
-      ),
     })
   );
 
-
+console.log(produtos[0]);
+console.log(produtosFormatados[0]);
 
   return (
     <div className="mx-auto w-full px-8">

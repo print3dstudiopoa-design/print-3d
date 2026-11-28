@@ -187,14 +187,25 @@ export function TabelaVendas({
                   <td className="px-5 py-4">
 
                     <span
-                        className={`
+                      className={`
                         rounded-full
                         px-3
                         py-1
-                        text-lx
+                        text-xs
                         font-medium
-                       
-                        `}
+
+                        ${
+                          venda.formaPagamento === "PIX"
+                            ? "bg-green-100 text-green-700"
+                            : venda.formaPagamento ===
+                              "DINHEIRO"
+                            ? "bg-amber-100 text-amber-700"
+                            : venda.formaPagamento ===
+                              "CARTAO_DEBITO"
+                            ? "bg-blue-100 text-blue-700"
+                            : "bg-indigo-100 text-indigo-700"
+                        }
+                      `}
                     >
                        {formatarPagamento(
                             venda.formaPagamento

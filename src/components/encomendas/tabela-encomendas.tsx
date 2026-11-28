@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { VisualizarEncomenda } from "./visualizar-encomenda";
-import { EncomendaItem } from "@prisma/client";
 
 interface EncomendaTabela {
   id: string;

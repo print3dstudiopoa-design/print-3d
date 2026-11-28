@@ -205,3 +205,33 @@ enum FormaPagamento {
   CARTAO_DEBITO
   CARTAO_CREDITO
 }
+
+model Despesa {
+  id String @id @default(cuid())
+
+  codigo Int @unique @default(autoincrement())
+
+  descricao String
+
+  valor Decimal @db.Decimal(10, 2)
+
+  data DateTime
+
+  observacao String?
+
+  categoria categoriaDespesa
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+}
+
+enum categoriaDespesa {
+  ADMINISTRATIVO
+  DECORACAO
+  FILAMENTO
+  MANTENCAO_MAQUINA
+  ITENS_TRABALHO
+  OUTROS
+}

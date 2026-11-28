@@ -20,8 +20,6 @@ interface ProdutoTabela {
   filamento: string;
   valor: string;
 
-  editar: React.ReactNode;
-  excluir: React.ReactNode;
 }
 
 interface Props {
@@ -131,7 +129,21 @@ export function TabelaProdutos({
                   <td className="px-5 py-4">
                     <div className="flex justify-center gap-3">
                       <EditarProduto
-                        produto={produto}
+                        produto={{
+                          ...produto,
+
+                          filamentoGramas: Number(
+                            produto.filamentoGramas
+                          ),
+
+                          valorPadrao: Number(
+                            produto.valorPadrao
+                          ),
+
+                          valorCusto: Number(
+                            produto.valorCusto
+                          ),
+                        }}
                       />
 
                       <ExcluirProduto
